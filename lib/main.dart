@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_projemiz/ekranlar/oturum_ac.dart';
+import 'package:flutter_projemiz/ekranlar/OturumAc.dart';
 import 'package:flutter_projemiz/ekranlar/profil.dart';
 import 'package:flutter_projemiz/ekranlar/IcerikYonetici/index.dart';
+import 'package:flutter_session/flutter_session.dart';
+import 'package:flutter_projemiz/sistem/globals.dart' as globals;
+import 'package:flutter_projemiz/sistem/nKullanici.dart';
 
 void main() {
   runApp(MyApp());
@@ -44,7 +48,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
           ),
           IconButton(
             onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => OturumAc())),
+                context, MaterialPageRoute(builder: (context) => OturumAc2())),
             icon: Icon(Icons.login, color: Colors.white),
           )
         ],
@@ -52,9 +56,9 @@ class _GirisEkraniState extends State<GirisEkrani> {
       ),
       body: Column(
         children: <Widget>[
-          Text(
-            'Burası giriş sayfamız',
-          )
+          Text(globals.kullaniciId > 0
+              ? globals.nKullanici.isim
+              : 'Oturum Kapalı'),
         ],
       ),
     );

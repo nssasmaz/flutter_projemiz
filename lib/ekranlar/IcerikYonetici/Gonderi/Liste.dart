@@ -10,8 +10,20 @@ class GonderiListe extends StatefulWidget {
 class _GonderiListeState extends State<GonderiListe> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("Test"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("İçerik Listeleri"),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.more_vert, color: Colors.white),
+          )
+        ],
+        backgroundColor: Colors.pink[900],
+      ),
+      body: Container(
+        child: Text("Test"),
+      ),
     );
   }
 }
