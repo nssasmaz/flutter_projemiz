@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_projemiz/ekranlar/oturum_ac.dart';
-import 'package:flutter_projemiz/ekranlar/OturumAc.dart';
+import 'package:flutter_projemiz/ekranlar/OturumIslemleri.dart';
 import 'package:flutter_projemiz/ekranlar/profil.dart';
 import 'package:flutter_projemiz/ekranlar/IcerikYonetici/index.dart';
 import 'package:flutter_session/flutter_session.dart';
