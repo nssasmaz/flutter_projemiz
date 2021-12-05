@@ -48,7 +48,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
           ),
           IconButton(
             onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => OturumAc2())),
+                context, MaterialPageRoute(builder: (context) => OturumAc())),
             icon: Icon(Icons.login, color: Colors.white),
           )
         ],
@@ -56,7 +56,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
       ),
       body: Column(
         children: <Widget>[
-          Text(globals.kullaniciId > 0
+          Text((globals.oturumAcik == true && globals.nKullanici.id > 0)
               ? globals.nKullanici.isim
               : 'Oturum Kapalı'),
         ],

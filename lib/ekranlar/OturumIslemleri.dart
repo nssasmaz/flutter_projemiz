@@ -8,8 +8,6 @@ import 'package:flutter_projemiz/sistem/globals.dart' as globals;
 
 class OturumAc extends StatefulWidget {
   const OturumAc({key}) : super(key: key);
-  TextEditingController formKulaniciAdi = new TextEditingController();
-  TextEditingController formSifre = new TextEditingController();
 
   @override
   _OturumAcState createState() => _OturumAcState();
@@ -18,6 +16,9 @@ class OturumAc extends StatefulWidget {
 class _OturumAcState extends State<OturumAc> {
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _formKulaniciAdi = new TextEditingController();
+    final TextEditingController _formSifre = new TextEditingController();
+
     bool hata, islemDevam, basarili;
     String sonucMesaj;
 
@@ -47,7 +48,7 @@ class _OturumAcState extends State<OturumAc> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         TextField(
-                          controller: formKulaniciAdi,
+                          controller: _formKulaniciAdi,
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                           decoration: InputDecoration(
@@ -63,14 +64,11 @@ class _OturumAcState extends State<OturumAc> {
                               hintStyle: TextStyle(
                                   fontSize: 16.0, color: Colors.orangeAccent),
                               hintText: 'Kullanıcı Adı'),
-                          onChanged: (yazi) {
-                            formKullaniciAdi.text = yazi;
-                          },
                         ),
                         SizedBox(height: 20),
                         TextField(
                           obscureText: true,
-                          controller: formSifre,
+                          controller: _formSifre,
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                           decoration: InputDecoration(
@@ -131,8 +129,8 @@ class _OturumAcState extends State<OturumAc> {
                                           'https://mor.podkobi.com/webservis_panel/oturum.php'));
                                   request.fields.addAll({
                                     'i': 'oturum-ac',
-                                    'kullanici_adi': form_kulaniciAdi.text,
-                                    'sifre': form_sifre.text
+                                    'kullanici_adi': _formKulaniciAdi.text,
+                                    'sifre': _formSifre.text
                                   });
                                   http.StreamedResponse response =
                                       await request.send();
@@ -223,6 +221,10 @@ class _OturumAcState extends State<OturumAc> {
                                           }
                                           print(kullaniciId);
                                           if (kullaniciId > 0) {
+                                            setState(() {
+                                              globals.nKullanici = nKullanici;
+                                              globals.oturumAcik = true;
+                                            });
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
