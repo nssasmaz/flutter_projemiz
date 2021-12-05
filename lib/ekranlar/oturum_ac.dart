@@ -9,7 +9,7 @@ class OturumAc2 extends StatefulWidget {
 class _OturumAcState extends State<OturumAc2> {
   @override
   Widget build(BuildContext context) {
-    final kullanici_adi = new TextEditingController();
+    final kullaniciAdi = new TextEditingController();
     final sifre = new TextEditingController();
 
     bool hata, islem_devam, basarili;
@@ -53,7 +53,7 @@ class _OturumAcState extends State<OturumAc2> {
                             labelStyle:
                                 TextStyle(fontSize: 16.0, color: Colors.white),
                             labelText: 'Kullanıcı Adı'),
-                        controller: kullanici_adi,
+                        controller: kullaniciAdi,
                       ),
                       SizedBox(height: 20),
                       TextField(
@@ -114,7 +114,7 @@ class _OturumAcState extends State<OturumAc2> {
                                     Uri.parse(
                                         'http://mor.podkobi.com/webservis_panel/oturum.php?i=oturum-ac'));
                                 request.fields.addAll({
-                                  'kullanici_adi': kullanici_adi.text,
+                                  'kullanici_adi': kullaniciAdi.text,
                                   'sifre': sifre.text
                                 });
 /*
