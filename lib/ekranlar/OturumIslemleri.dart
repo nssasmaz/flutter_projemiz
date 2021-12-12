@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_projemiz/main.dart';
 import 'package:flutter_projemiz/sistem/AjaxCevap.dart';
 import 'package:flutter_projemiz/sistem/globals.dart';
-import 'package:flutter_projemiz/sistem/nKullanici.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_projemiz/sistem/globals.dart' as globals;
 
@@ -36,10 +35,7 @@ class _OturumAcState extends State<OturumAc> {
             child: Stack(
               alignment: Alignment.topCenter,
               children: <Widget>[
-                Positioned(
-                    top: boyut.height * 0.3,
-                    width: boyut.width,
-                    child: Center(child: Image.asset("dosya/logo-white.png"))),
+                Positioned(top: boyut.height * 0.3, width: boyut.width, child: Center(child: Image.asset("dosya/logo-white.png"))),
                 Positioned(
                   top: boyut.height * 0.4,
                   width: 400,
@@ -49,40 +45,34 @@ class _OturumAcState extends State<OturumAc> {
                       children: [
                         TextField(
                           controller: _formKulaniciAdi,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                           decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Colors.orangeAccent, width: 0.0),
+                                borderSide: const BorderSide(color: Colors.orangeAccent, width: 0.0),
                               ),
                               border: OutlineInputBorder(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
                               focusColor: Colors.white,
-                              hintStyle: TextStyle(
-                                  fontSize: 16.0, color: Colors.orangeAccent),
+                              hintStyle: TextStyle(fontSize: 16.0, color: Colors.orangeAccent),
                               hintText: 'Kullanıcı Adı'),
                         ),
                         SizedBox(height: 20),
                         TextField(
                           obscureText: true,
                           controller: _formSifre,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                           decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Colors.orangeAccent, width: 0.0),
+                                borderSide: const BorderSide(color: Colors.orangeAccent, width: 0.0),
                               ),
                               border: OutlineInputBorder(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
                               focusColor: Colors.white,
-                              hintStyle: TextStyle(
-                                  fontSize: 16.0, color: Colors.orangeAccent),
+                              hintStyle: TextStyle(fontSize: 16.0, color: Colors.orangeAccent),
                               hintText: 'Şifre'),
                         ),
                         SizedBox(height: 30),
@@ -102,12 +92,8 @@ class _OturumAcState extends State<OturumAc> {
                                 onPressed: () => Navigator.pop(context),
                                 style: ElevatedButton.styleFrom(
                                     primary: Colors.white,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 50, vertical: 20),
-                                    textStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500)),
+                                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                                    textStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
                               ),
                             ),
                             SizedBox(
@@ -118,26 +104,15 @@ class _OturumAcState extends State<OturumAc> {
                               child: ElevatedButton(
                                 child: Text(
                                   "Oturum Aç",
-                                  style: TextStyle(
-                                      color: Colors.deepPurple,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () async {
-                                  var request = http.MultipartRequest(
-                                      'POST',
-                                      Uri.parse(
-                                          'https://mor.podkobi.com/webservis_panel/oturum.php'));
-                                  request.fields.addAll({
-                                    'i': 'oturum-ac',
-                                    'kullanici_adi': _formKulaniciAdi.text,
-                                    'sifre': _formSifre.text
-                                  });
-                                  http.StreamedResponse response =
-                                      await request.send();
+                                  var request = http.MultipartRequest('POST', Uri.parse('https://mor.podkobi.com/webservis_panel/oturum.php'));
+                                  request.fields.addAll({'i': 'oturum-ac', 'kullanici_adi': _formKulaniciAdi.text, 'sifre': _formSifre.text});
+                                  http.StreamedResponse response = await request.send();
 
                                   if (response.statusCode == 200) {
-                                    sonucMesaj =
-                                        await response.stream.bytesToString();
+                                    sonucMesaj = await response.stream.bytesToString();
 
                                     dynamic oturum;
 
@@ -149,8 +124,7 @@ class _OturumAcState extends State<OturumAc> {
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: Text("Oturum Açılamadı!"),
-                                            content: Text(
-                                                "Gelen veri doğrulanamadı! {$sonucMesaj}"),
+                                            content: Text("Gelen veri doğrulanamadı! {$sonucMesaj}"),
                                             actions: [
                                               TextButton(
                                                 child: Text("KAPAT"),
@@ -166,42 +140,31 @@ class _OturumAcState extends State<OturumAc> {
 
                                     if (oturum != null) {
                                       if (oturum.durum == 'hata') {
-                                        oturum.hata.asMap().forEach((index,
-                                                hataMesaj) =>
-                                            {
+                                        oturum.hata.asMap().forEach((index, hataMesaj) => {
                                               showDialog(
                                                 context: context,
-                                                builder:
-                                                    (BuildContext context) {
+                                                builder: (BuildContext context) {
                                                   return AlertDialog(
                                                     title: Text(
                                                       hataMesaj[0],
-                                                      style: TextStyle(
-                                                          color: Colors.white),
+                                                      style: TextStyle(color: Colors.white),
                                                     ),
                                                     content: Text(
                                                       hataMesaj[2],
-                                                      style: TextStyle(
-                                                          color: Colors.white),
+                                                      style: TextStyle(color: Colors.white),
                                                     ),
                                                     actions: [
                                                       TextButton(
                                                         child: Text(
                                                           "KAPAT",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
+                                                          style: TextStyle(color: Colors.white),
                                                         ),
                                                         onPressed: () {
-                                                          Navigator.pop(
-                                                              context, true);
+                                                          Navigator.pop(context, true);
                                                         },
                                                       ),
                                                     ],
-                                                    backgroundColor:
-                                                        hataMesaj[1] == 'danger'
-                                                            ? Colors.red
-                                                            : Colors.white,
+                                                    backgroundColor: hataMesaj[1] == 'danger' ? Colors.red : Colors.white,
                                                   );
                                                 },
                                               )
@@ -211,10 +174,8 @@ class _OturumAcState extends State<OturumAc> {
                                           print(oturum.veri);
                                           int kullaniciId = 0;
                                           try {
-                                            nKullanici =
-                                                kullaniciFromJson(oturum.veri);
-                                            kullaniciId =
-                                                int.parse(nKullanici.id) ?? 0;
+                                            nKullanici = kullaniciFromJson(oturum.veri);
+                                            kullaniciId = int.parse(nKullanici.id) ?? 0;
                                           } catch (e) {
                                             kullaniciId = 0;
                                             print("Hata");
@@ -225,11 +186,7 @@ class _OturumAcState extends State<OturumAc> {
                                               globals.nKullanici = nKullanici;
                                               globals.oturumAcik = true;
                                             });
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        GirisEkrani()));
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => GirisEkrani()));
 /*
                                             showDialog(
                                               context: context,
@@ -280,12 +237,8 @@ class _OturumAcState extends State<OturumAc> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Colors.orangeAccent,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 50, vertical: 20),
-                                    textStyle: TextStyle(
-                                        color: Colors.deepPurple,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500)),
+                                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                                    textStyle: TextStyle(color: Colors.deepPurple, fontSize: 14, fontWeight: FontWeight.w500)),
                               ),
                             ),
                           ],

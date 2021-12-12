@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_projemiz/sistem/nKullanici.dart';
+import 'package:flutter_projemiz/sistem/Kullanici.dart';
+import 'package:flutter_projemiz/sistem/globals.dart' as globals;
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'dart:io';
+
+import '../main.dart';
 
 class OturumAc2 extends StatefulWidget {
   @override
@@ -30,39 +33,34 @@ class _OturumAcState extends State<OturumAc2> {
           },
         );
       } else {
+        /*
         // GET METODU
         var request = http.Request(
-            'GET',
-            Uri.parse(
-                'http://profesor.elazig.yerel/ajax.php?islem=oturumAc&kullanici_kodu=' +
-                    _kkod +
-                    '&sifre=' +
-                    _sifre));
+            'GET', Uri.parse('http://mor.podkobi.com/webservis_panel/servis.php?i=oturum_ac&kullanici_kodu=' + _kkod + '&sifre=' + _sifre));
 
-        /*
-    // POST METODU
-    var request = http.MultipartRequest(
-        'POST', Uri.parse('http://profesor.elazig.yerel/ajax.php'));
-    request.fields.addAll({'kullanici_adi': 'nssasmaz', 'sifre': 'tmf7qkckct'});
     */
+        // POST METODU
+        var request = http.MultipartRequest('POST', Uri.parse('https://mor.podkobi.com/webservis_panel/servis.php'));
+        request.fields.addAll({'i': 'oturum-ac', 'kullanici_adi': _kkod, 'sifre': _sifre});
 
         http.StreamedResponse response = await request.send();
         if (response.statusCode == 200) {
           var sonucJSON = await response.stream.bytesToString();
           var sonuc = convert.jsonDecode(sonucJSON) as Map<String, dynamic>;
-          print(sonuc);
           if (sonuc['durum'] == "tamam") {
+            print(sonuc['veri']);
             setState(() {
-              _Kullanici = Kullanici.fromJson(sonuc['veri']);
-              _oturum_durumu = true;
+              globals.nKullanici = Kullanici.fromJson(sonuc['veri']);
+              globals.oturumAcik = true;
             });
+            Navigator.push(context, MaterialPageRoute(builder: (context) => GirisEkrani()));
             showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
                   // Retrieve the text the that user has entered by using the
                   // TextEditingController.
-                  content: Text(sonuc['veri']['isim']),
+                  content: Text(globals.nKullanici.kIsim),
                 );
               },
             );
@@ -72,10 +70,10 @@ class _OturumAcState extends State<OturumAc2> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text(sonuc['hata'][0]['baslik']),
+                  title: Text(sonuc['hata'][0]),
                   // Retrieve the text the that user has entered by using the
                   // TextEditingController.
-                  content: Text(sonuc['hata'][0]['aciklama']),
+                  content: Text(sonuc['hata'][2]),
                   actions: <Widget>[
                     TextButton(
                       child: const Text('Tamam'),
@@ -106,10 +104,7 @@ class _OturumAcState extends State<OturumAc2> {
             child: Stack(
               alignment: Alignment.topCenter,
               children: <Widget>[
-                Positioned(
-                    top: boyut.height * 0.3,
-                    width: boyut.width,
-                    child: Center(child: Image.asset("dosya/logo-white.png"))),
+                Positioned(top: boyut.height * 0.3, width: boyut.width, child: Center(child: Image.asset("dosya/logo-white.png"))),
                 Positioned(
                   top: boyut.height * 0.4,
                   width: boyut.width * 0.8,
@@ -117,36 +112,28 @@ class _OturumAcState extends State<OturumAc2> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextField(
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         decoration: InputDecoration(
                             enabledBorder: const OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 0.0),
+                              borderSide: const BorderSide(color: Colors.white, width: 0.0),
                             ),
                             border: OutlineInputBorder(),
-                            hintStyle:
-                                TextStyle(fontSize: 16.0, color: Colors.white),
-                            labelStyle:
-                                TextStyle(fontSize: 16.0, color: Colors.white),
+                            hintStyle: TextStyle(fontSize: 16.0, color: Colors.white),
+                            labelStyle: TextStyle(fontSize: 16.0, color: Colors.white),
                             labelText: 'Kullanıcı Adı'),
                         controller: formKullaniciAdi,
                       ),
                       SizedBox(height: 20),
                       TextField(
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         obscureText: true,
                         decoration: InputDecoration(
                             enabledBorder: const OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 0.0),
+                              borderSide: const BorderSide(color: Colors.white, width: 0.0),
                             ),
                             border: OutlineInputBorder(),
-                            hintStyle:
-                                TextStyle(fontSize: 16.0, color: Colors.white),
-                            labelStyle:
-                                TextStyle(fontSize: 16.0, color: Colors.white),
+                            hintStyle: TextStyle(fontSize: 16.0, color: Colors.white),
+                            labelStyle: TextStyle(fontSize: 16.0, color: Colors.white),
                             labelText: 'Şifre'),
                         controller: formSifre,
                       ),
@@ -167,12 +154,8 @@ class _OturumAcState extends State<OturumAc2> {
                               onPressed: () => Navigator.pop(context),
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.white,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 50, vertical: 20),
-                                  textStyle: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500)),
+                                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                                  textStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
                             ),
                           ),
                           SizedBox(
@@ -186,17 +169,12 @@ class _OturumAcState extends State<OturumAc2> {
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {
-                                _oturumAc(
-                                    formKullaniciAdi.text, formSifre.text);
+                                _oturumAc(formKullaniciAdi.text, formSifre.text);
                               },
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.pink,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 50, vertical: 20),
-                                  textStyle: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500)),
+                                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                                  textStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
                             ),
                           ),
                         ],

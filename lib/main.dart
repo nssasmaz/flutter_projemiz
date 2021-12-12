@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_projemiz/ekranlar/oturum_ac.dart';
-import 'package:flutter_projemiz/ekranlar/OturumIslemleri.dart';
 import 'package:flutter_projemiz/ekranlar/profil.dart';
 import 'package:flutter_projemiz/ekranlar/IcerikYonetici/index.dart';
-import 'package:flutter_session/flutter_session.dart';
 import 'package:flutter_projemiz/sistem/globals.dart' as globals;
-import 'package:flutter_projemiz/sistem/nKullanici.dart';
+import 'package:flutter_projemiz/sistem/Kullanici.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,13 +40,11 @@ class _GirisEkraniState extends State<GirisEkrani> {
         ),
         actions: <Widget>[
           IconButton(
-            onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Profil())),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Profil())),
             icon: Icon(Icons.account_circle, color: Colors.white),
           ),
           IconButton(
-            onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => OturumAc())),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => OturumAc2())),
             icon: Icon(Icons.login, color: Colors.white),
           )
         ],
@@ -56,9 +52,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
       ),
       body: Column(
         children: <Widget>[
-          Text((globals.oturumAcik == true && globals.nKullanici.id > 0)
-              ? globals.nKullanici.isim
-              : 'Oturum Kapalı'),
+          Text((globals.oturumAcik == true && globals.nKullanici.kId > 0) ? globals.nKullanici.kIsim : 'Oturum Kapalı'),
         ],
       ),
     );
@@ -89,17 +83,11 @@ class SideMenuIcerik extends StatelessWidget {
                 ),
                 Text(
                   "Nursin Şaşmaz",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 )
               ],
             ),
-            decoration: BoxDecoration(
-                color: Colors.green,
-                image: DecorationImage(
-                    fit: BoxFit.fill, image: AssetImage('dosya/arkaplan.jpg'))),
+            decoration: BoxDecoration(color: Colors.green, image: DecorationImage(fit: BoxFit.fill, image: AssetImage('dosya/arkaplan.jpg'))),
           ),
           ListTile(
             leading: Icon(Icons.home),
@@ -109,8 +97,7 @@ class SideMenuIcerik extends StatelessWidget {
           ListTile(
               leading: Icon(Icons.folder_open),
               title: Text('İçerik Yöneticisi'),
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => IcerikYonetici()))),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => IcerikYonetici()))),
         ],
       ),
     );
