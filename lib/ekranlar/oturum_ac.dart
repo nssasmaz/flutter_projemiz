@@ -7,12 +7,12 @@ import 'dart:io';
 
 import '../main.dart';
 
-class OturumAc2 extends StatefulWidget {
+class OturumAc extends StatefulWidget {
   @override
   _OturumAcState createState() => _OturumAcState();
 }
 
-class _OturumAcState extends State<OturumAc2> {
+class _OturumAcState extends State<OturumAc> {
   @override
   Widget build(BuildContext context) {
     bool _oturum_durumu = false;
@@ -93,96 +93,86 @@ class _OturumAcState extends State<OturumAc2> {
     Size boyut = MediaQuery.of(context).size;
     return Scaffold(
         body: Container(
-            height: boyut.height,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("dosya/arkaplan.jpg"),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: <Widget>[
-                Positioned(top: boyut.height * 0.3, width: boyut.width, child: Center(child: Image.asset("dosya/logo-white.png"))),
-                Positioned(
-                  top: boyut.height * 0.4,
-                  width: boyut.width * 0.8,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextField(
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white, width: 0.0),
-                            ),
-                            border: OutlineInputBorder(),
-                            hintStyle: TextStyle(fontSize: 16.0, color: Colors.white),
-                            labelStyle: TextStyle(fontSize: 16.0, color: Colors.white),
-                            labelText: 'Kullanıcı Adı'),
-                        controller: formKullaniciAdi,
-                      ),
-                      SizedBox(height: 20),
-                      TextField(
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white, width: 0.0),
-                            ),
-                            border: OutlineInputBorder(),
-                            hintStyle: TextStyle(fontSize: 16.0, color: Colors.white),
-                            labelStyle: TextStyle(fontSize: 16.0, color: Colors.white),
-                            labelText: 'Şifre'),
-                        controller: formSifre,
-                      ),
-                      SizedBox(height: 30),
-
-                      // Butonlar
-                      Container(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(29),
-                            child: ElevatedButton(
-                              child: Text(
-                                "İptal",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                                  textStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(29),
-                            child: ElevatedButton(
-                              child: Text(
-                                "Oturum Aç",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onPressed: () async {
-                                _oturumAc(formKullaniciAdi.text, formSifre.text);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.pink,
-                                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                                  textStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-                            ),
-                          ),
-                        ],
-                      ))
-                    ],
+            decoration: const BoxDecoration(color: Color(0xFF7F2061)),
+            padding: const EdgeInsets.all(140),
+            margin: const EdgeInsets.all(0),
+            width: double.maxFinite,
+            child: Container(
+              width: 340,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Image.asset("dosya/logo-white.png"),
+                  SizedBox(height: 30),
+                  TextField(
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        border: OutlineInputBorder(),
+                        hintStyle: TextStyle(fontSize: 16.0, color: Colors.white),
+                        labelStyle: TextStyle(fontSize: 16.0, color: Colors.white),
+                        labelText: 'Kullanıcı Adı'),
+                    controller: formKullaniciAdi,
                   ),
-                ),
-              ],
+                  SizedBox(height: 20),
+                  TextField(
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    obscureText: true,
+                    decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        border: OutlineInputBorder(),
+                        hintStyle: TextStyle(fontSize: 16.0, color: Colors.white),
+                        labelStyle: TextStyle(fontSize: 16.0, color: Colors.white),
+                        labelText: 'Şifre'),
+                    controller: formSifre,
+                  ),
+                  SizedBox(height: 30),
+                  // Butonlar
+                  Container(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(29),
+                        child: ElevatedButton(
+                          child: Text(
+                            "İptal",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                              textStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(29),
+                        child: ElevatedButton(
+                          child: Text(
+                            "Oturum Aç",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () async {
+                            _oturumAc(formKullaniciAdi.text, formSifre.text);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.pink,
+                              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                              textStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        ),
+                      ),
+                    ],
+                  ))
+                ],
+              ),
             )));
   }
 }

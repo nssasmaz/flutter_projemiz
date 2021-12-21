@@ -4,6 +4,7 @@ import 'package:flutter_projemiz/ekranlar/profil.dart';
 import 'package:flutter_projemiz/ekranlar/IcerikYonetici/index.dart';
 import 'package:flutter_projemiz/sistem/globals.dart' as globals;
 import 'package:flutter_projemiz/sistem/Kullanici.dart';
+import 'package:flutter_projemiz/ekranlar/karsilama.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: GirisEkrani(),
+      home: KarsilamaEkrani(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -44,7 +45,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
             icon: Icon(Icons.account_circle, color: Colors.white),
           ),
           IconButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => OturumAc2())),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => OturumAc())),
             icon: Icon(Icons.login, color: Colors.white),
           )
         ],
