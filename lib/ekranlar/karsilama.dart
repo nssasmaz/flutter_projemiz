@@ -12,7 +12,7 @@ class _KarsilamaEkraniState extends State<KarsilamaEkrani> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(color: Color(0xFF7F2061)),
-      padding: const EdgeInsets.all(140),
+      padding: const EdgeInsets.symmetric(vertical: 140, horizontal: 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -27,7 +27,7 @@ class _KarsilamaEkraniState extends State<KarsilamaEkrani> {
             borderRadius: BorderRadius.circular(29),
             child: ElevatedButton(
               child: Text(
-                "Oturum Aç",
+                "BAŞLA",
                 style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w700),
               ),
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => OturumAc())),
