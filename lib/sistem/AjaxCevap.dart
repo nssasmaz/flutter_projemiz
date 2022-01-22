@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-AjaxCevap CevapParcala(String str) => AjaxCevap.fromJson(json.decode(str));
+AjaxCevap cevapParcala(String str) => AjaxCevap.fromJson(json.decode(str));
 
 class AjaxCevap {
   AjaxCevap({
@@ -20,8 +20,6 @@ class AjaxCevap {
   factory AjaxCevap.fromJson(Map<String, dynamic> json) => AjaxCevap(
         durum: json["durum"] == null ? null : json["durum"],
         veri: json["veri"] == null ? null : json["veri"],
-        hata: json["hata"] == null
-            ? null
-            : List<dynamic>.from(json["hata"].map((x) => x)),
+        hata: json["hata"] == null ? null : List<dynamic>.from(json["hata"].map((x) => x)),
       );
 }

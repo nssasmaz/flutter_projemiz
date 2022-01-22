@@ -2,8 +2,8 @@
     package="com.example.flutter_projemiz">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="morPanel"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Mor"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

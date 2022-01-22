@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_projemiz/ekranlar/anasayfa.dart';
+import 'package:flutter_projemiz/ekranlar/karsilama.dart';
+import 'package:flutter_projemiz/ekranlar/kayit_ol.dart';
 import 'package:flutter_projemiz/sistem/Kullanici.dart';
 import 'package:flutter_projemiz/ekranlar/sifremi_unuttum.dart';
 import 'package:flutter_projemiz/sistem/globals.dart' as globals;
 import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../main.dart';
+import 'dart:convert' as convert;
 
 class OturumAc extends StatefulWidget {
   @override
@@ -19,7 +20,10 @@ class _OturumAcState extends State<OturumAc> {
     final formKullaniciAdi = TextEditingController();
     final formSifre = TextEditingController();
 
+    Kullanici kBilgi;
+
     Future<void> _oturumAc(String _kkod, String _sifre) async {
+      final SharedPreferences lokalbilgi = await SharedPreferences.getInstance();
       if (_kkod == '' || _sifre == '') {
         showDialog(
           context: context,
@@ -37,7 +41,7 @@ class _OturumAcState extends State<OturumAc> {
 
     */
         // POST METODU
-        var request = http.MultipartRequest('POST', Uri.parse('https://mor.podkobi.com/webservis_panel/servis.php'));
+        var request = http.MultipartRequest('POST', Uri.parse('https://mor.podkobi.com/ws/p/'));
         request.fields.addAll({'i': 'oturum-ac', 'kullanici_adi': _kkod, 'sifre': _sifre});
 
         http.StreamedResponse response = await request.send();
@@ -45,13 +49,17 @@ class _OturumAcState extends State<OturumAc> {
           var sonucJSON = await response.stream.bytesToString();
           var sonuc = convert.jsonDecode(sonucJSON) as Map<String, dynamic>;
           if (sonuc['durum'] == "tamam") {
-            print(sonuc['veri']);
-
             setState(() {
-              globals.nKullanici = Kullanici.fromJson(sonuc['veri']);
-              globals.oturumAcik = true;
+              kBilgi = Kullanici.fromJson(sonuc['veri']);
+              lokalbilgi.setBool("oturum", true); // Oturum Açık
+              lokalbilgi.setInt("isletme_id", kBilgi.iId);
+              lokalbilgi.setInt("kullanici_id", kBilgi.kId);
+              lokalbilgi.setString("kullanici_isim", kBilgi.kIsim);
+              lokalbilgi.setString("kullanici_soyisim", kBilgi.kSoyisim);
+              lokalbilgi.setString("kullanici_eposta", kBilgi.kEposta);
             });
-            Navigator.push(context, MaterialPageRoute(builder: (context) => GirisEkrani()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Anasayfa()));
+            /*
             showDialog(
               context: context,
               builder: (context) {
@@ -62,7 +70,10 @@ class _OturumAcState extends State<OturumAc> {
                 );
               },
             );
+            */
           } else {
+            globals.oturumAcik = false;
+            lokalbilgi.setBool("oturum", false); // Oturum Açık
             print(sonuc['hata']);
             showDialog(
               context: context,
@@ -143,7 +154,7 @@ class _OturumAcState extends State<OturumAc> {
                       ),
                       decoration: new BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.white),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 40),
 
                     // Butonlar
                     Container(
@@ -155,7 +166,21 @@ class _OturumAcState extends State<OturumAc> {
                               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SifremiUnuttum())),
                               child: Text(
                                 "Şifremi Unuttum",
-                                style: TextStyle(color: Colors.white70, fontSize: 11),
+                                style: TextStyle(color: Colors.white, fontSize: 11),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                              child: Text(
+                                "|",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => KayitOl())),
+                              child: Text(
+                                "Kayıt Ol",
+                                style: TextStyle(color: Colors.white, fontSize: 11),
                               ),
                             ),
                             SizedBox(
@@ -166,7 +191,7 @@ class _OturumAcState extends State<OturumAc> {
                               child: ElevatedButton(
                                 child: Text(
                                   "OTURUM AÇ",
-                                  style: TextStyle(color: Colors.deepPurple, fontSize: 12, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Color(0xFF5E0524), fontSize: 12, fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () async {
                                   _oturumAc(formKullaniciAdi.text, formSifre.text);

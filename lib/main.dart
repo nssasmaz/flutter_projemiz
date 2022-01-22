@@ -1,106 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_projemiz/ekranlar/oturum_ac.dart';
-import 'package:flutter_projemiz/ekranlar/profil.dart';
-import 'package:flutter_projemiz/ekranlar/IcerikYonetici/index.dart';
-import 'package:flutter_projemiz/sistem/globals.dart' as globals;
-import 'package:flutter_projemiz/sistem/Kullanici.dart';
-import 'package:flutter_projemiz/ekranlar/karsilama.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import 'ekranlar/anasayfa.dart';
+import 'ekranlar/karsilama.dart';
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Uygulama v1',
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
-      home: KarsilamaEkrani(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class GirisEkrani extends StatefulWidget {
-  @override
-  _GirisEkraniState createState() => _GirisEkraniState();
-}
-
-class _GirisEkraniState extends State<GirisEkrani> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: SideMenuIcerik(),
-      appBar: AppBar(
-        title: Image.asset(
-          "dosya/logo-white.png",
-          height: 30,
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Profil())),
-            icon: Icon(Icons.account_circle, color: Colors.white),
-          ),
-          IconButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => OturumAc())),
-            icon: Icon(Icons.login, color: Colors.white),
-          )
-        ],
-        backgroundColor: Colors.pink[900],
-      ),
-      body: Column(
-        children: <Widget>[
-          Text((globals.oturumAcik == true && globals.nKullanici.kId > 0) ? globals.nKullanici.kIsim : 'Oturum Kapalı'),
-        ],
-      ),
-    );
-  }
-}
-
-class SideMenuIcerik extends StatelessWidget {
-  const SideMenuIcerik({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        children: [
-          DrawerHeader(
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 40.0,
-                  backgroundImage: AssetImage(
-                    'dosya/profil.png',
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Nursin Şaşmaz",
-                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            decoration: BoxDecoration(color: Colors.green, image: DecorationImage(fit: BoxFit.fill, image: AssetImage('dosya/arkaplan.jpg'))),
-          ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Anasayfa'),
-            onTap: () => Navigator.pop(context),
-          ),
-          ListTile(
-              leading: Icon(Icons.folder_open),
-              title: Text('İçerik Yöneticisi'),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => IcerikYonetici()))),
-        ],
-      ),
-    );
-  }
+main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences lokalbilgi = await SharedPreferences.getInstance();
+  var oturumAcik = (lokalbilgi.getBool('oturum') == null) ? false : lokalbilgi.getBool('oturum');
+  runApp(MaterialApp(
+    title: 'Mor',
+    theme: ThemeData(
+      primarySwatch: Colors.purple,
+    ),
+    home: oturumAcik ? Anasayfa() : KarsilamaEkrani(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
