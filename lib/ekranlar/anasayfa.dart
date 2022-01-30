@@ -46,7 +46,21 @@ class _AnasayfaState extends State<Anasayfa> {
     return Scaffold(
       drawer: Drawer(
         child: ListView(
-          children: <Widget>[Paketler()],
+          children: [
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Anasayfa'),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: Icon(Icons.folder_open),
+              title: Text('İçerik Yöneticisi'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => IcerikYonetici()),
+              ),
+            ),
+          ],
         ),
       ),
       appBar: AppBar(
@@ -58,8 +72,7 @@ class _AnasayfaState extends State<Anasayfa> {
         ),
         actions: <Widget>[
           IconButton(
-            onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Profil())),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Profil())),
             icon: Icon(Icons.account_circle, color: Colors.white),
           )
         ],
@@ -75,30 +88,26 @@ class _AnasayfaState extends State<Anasayfa> {
 }
 
 class Paketler extends StatelessWidget {
-  List liste = [];
-
   @override
   Widget build(BuildContext context) {
-    Future<List> _paketleriListele() async {
-      final SharedPreferences lokalbilgi =
-          await SharedPreferences.getInstance();
-
-      var kullanici_pizin = lokalbilgi.getString("kullanici_pizin").split(',');
-
-      print(kullanici_pizin);
+    Future<List<Widget>> _paketleriListele() async {
+      final SharedPreferences lokalbilgi = await SharedPreferences.getInstance();
+      int isletme_id = lokalbilgi.getInt("isletme_id");
+      int kullanici_id = lokalbilgi.getInt("kullanici_id");
+      List<Widget> paketListesi = [];
 
       try {
-        final response = await http
-            .get(Uri.parse('https://mor.podkobi.com/ws/p/?i=paketler'));
+        final response = await http.get(Uri.parse('https://mor.podkobi.com/ws/p/?i=paketler&i_id=$isletme_id&k_id=$kullanici_id'));
 
         if (response.statusCode == 200) {
           var sonuc = convert.jsonDecode(response.body) as Map<String, dynamic>;
-          var sonucPaketler =
-              convert.jsonDecode(sonuc["veri"]) as Map<String, dynamic>;
+          var sonucPaketler = convert.jsonDecode(sonuc["veri"]) as Map<String, dynamic>;
           print(sonucPaketler.length);
           if (sonucPaketler.length > 0) {
+            paketListesi = sonuc["veri"].map((data) => MenuOge.fromJson(data)).toList();
+
             sonucPaketler.forEach((key, deger) {
-              liste.add(new ListTile(
+              paketListesi.add(new ListTile(
                 leading: Icon(Icons.home),
                 title: Text(sonucPaketler[key]['baslik']),
                 onTap: () => Navigator.pop(context),
@@ -106,13 +115,17 @@ class Paketler extends StatelessWidget {
             });
           }
         }
-
-        return liste;
       } catch (e) {
         print("Başarısız Oldu! $e");
-        return null;
       }
+      return paketListesi;
     }
+
+    var sonuc = _paketleriListele();
+
+    print(sonuc);
+
+    /*
 
     return ListView(
       children: [
@@ -128,8 +141,50 @@ class Paketler extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => IcerikYonetici()),
           ),
-        )
+        ),
       ],
     );
+
+    */
   }
+}
+
+class MenuOge {
+  MenuOge({
+    this.simge,
+    this.baglanti,
+    this.baslik,
+    this.aciklama,
+    this.cssClass,
+    this.altOgeler,
+  });
+
+  String simge;
+  String baglanti;
+  String baslik;
+  String aciklama;
+  String cssClass;
+  List<dynamic> altOgeler;
+
+  factory MenuOge.fromRawJson(String str) => MenuOge.fromJson(convert.jsonDecode(str));
+
+  String toRawJson() => convert.jsonEncode(toJson());
+
+  factory MenuOge.fromJson(Map<String, dynamic> json) => MenuOge(
+        simge: json["simge"] == null ? null : json["simge"],
+        baglanti: json["baglanti"] == null ? null : json["baglanti"],
+        baslik: json["baslik"] == null ? null : json["baslik"],
+        aciklama: json["aciklama"] == null ? null : json["aciklama"],
+        cssClass: json["css_class"] == null ? null : json["css_class"],
+        altOgeler: json["alt_ogeler"] == null ? null : List<dynamic>.from(json["alt_ogeler"].map((x) => x)),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "simge": simge == null ? null : simge,
+        "baglanti": baglanti == null ? null : baglanti,
+        "baslik": baslik == null ? null : baslik,
+        "aciklama": aciklama == null ? null : aciklama,
+        "css_class": cssClass == null ? null : cssClass,
+        "alt_ogeler": altOgeler == null ? null : List<dynamic>.from(altOgeler.map((x) => x)),
+      };
 }
