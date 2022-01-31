@@ -35,6 +35,46 @@ class _AnasayfaState extends State<Anasayfa> {
     });
   }
 
+  Future<List<MenuOge>> _paketListesi() async {
+    final SharedPreferences lokalbilgi = await SharedPreferences.getInstance();
+    int isletmeId = lokalbilgi.getInt("isletme_id");
+    int kullaniciId = lokalbilgi.getInt("kullanici_id");
+    List<MenuOge> paketListesi = [];
+    paketListesi.add(new MenuOge(
+      simge: "home",
+      baglanti: "anasayfa",
+      baslik: "Anasayfa",
+      aciklama: "",
+      cssClass: "",
+    ));
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://mor.podkobi.com/ws/p/?i=paketler&i_id=$isletmeId&k_id=$kullaniciId'),
+      );
+
+      if (response.statusCode == 200) {
+        var sonucPaketler =
+            convert.jsonDecode(response.body)["veri"] as Map<String, dynamic>;
+        if (sonucPaketler.length > 0) {
+          sonucPaketler.forEach((key, deger) {
+            paketListesi.add(new MenuOge(
+                simge: deger["simge"],
+                widget: deger["widget"],
+                baglanti: deger["baglanti"],
+                baslik: deger["baslik"],
+                aciklama: deger["aciklama"],
+                cssClass: deger["cssClass"]));
+          });
+        }
+      }
+    } catch (e) {
+      print("0");
+      return null;
+    }
+    return paketListesi;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -45,22 +85,50 @@ class _AnasayfaState extends State<Anasayfa> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Anasayfa'),
-              onTap: () => Navigator.pop(context),
-            ),
-            ListTile(
-              leading: Icon(Icons.folder_open),
-              title: Text('İçerik Yöneticisi'),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => IcerikYonetici()),
-              ),
-            ),
-          ],
+        child: FutureBuilder(
+          future: _paketListesi(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<MenuOge>> snapshot) {
+            if (snapshot.data == null) {
+              return Column(
+                children: [
+                  Center(
+                    child: Text("Yükleniyor..."),
+                  )
+                ],
+              );
+            } else {
+              return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      leading: FaIcon(
+                        FontAwesomeIcons.chevronRight,
+                        size: 15.0,
+                      ),
+                      title: Text(snapshot.data[index].baslik),
+                      onTap: () => {
+                        print(snapshot.data[index].widget),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            switch (snapshot.data[index].widget) {
+                              case 'Anasayfa':
+                                return Anasayfa();
+                                break;
+                              case 'IcerikAnasayfa':
+                                return IcerikYonetici();
+                                break;
+                              default:
+                                return Anasayfa();
+                            }
+                          }),
+                        )
+                      },
+                    );
+                  });
+            }
+          },
         ),
       ),
       appBar: AppBar(
@@ -72,7 +140,8 @@ class _AnasayfaState extends State<Anasayfa> {
         ),
         actions: <Widget>[
           IconButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Profil())),
+            onPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Profil())),
             icon: Icon(Icons.account_circle, color: Colors.white),
           )
         ],
@@ -87,104 +156,20 @@ class _AnasayfaState extends State<Anasayfa> {
   }
 }
 
-class Paketler extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    Future<List<Widget>> _paketleriListele() async {
-      final SharedPreferences lokalbilgi = await SharedPreferences.getInstance();
-      int isletme_id = lokalbilgi.getInt("isletme_id");
-      int kullanici_id = lokalbilgi.getInt("kullanici_id");
-      List<Widget> paketListesi = [];
-
-      try {
-        final response = await http.get(Uri.parse('https://mor.podkobi.com/ws/p/?i=paketler&i_id=$isletme_id&k_id=$kullanici_id'));
-
-        if (response.statusCode == 200) {
-          var sonuc = convert.jsonDecode(response.body) as Map<String, dynamic>;
-          var sonucPaketler = convert.jsonDecode(sonuc["veri"]) as Map<String, dynamic>;
-          print(sonucPaketler.length);
-          if (sonucPaketler.length > 0) {
-            paketListesi = sonuc["veri"].map((data) => MenuOge.fromJson(data)).toList();
-
-            sonucPaketler.forEach((key, deger) {
-              paketListesi.add(new ListTile(
-                leading: Icon(Icons.home),
-                title: Text(sonucPaketler[key]['baslik']),
-                onTap: () => Navigator.pop(context),
-              ));
-            });
-          }
-        }
-      } catch (e) {
-        print("Başarısız Oldu! $e");
-      }
-      return paketListesi;
-    }
-
-    var sonuc = _paketleriListele();
-
-    print(sonuc);
-
-    /*
-
-    return ListView(
-      children: [
-        ListTile(
-          leading: Icon(Icons.home),
-          title: Text('Anasayfa'),
-          onTap: () => Navigator.pop(context),
-        ),
-        ListTile(
-          leading: Icon(Icons.folder_open),
-          title: Text('İçerik Yöneticisi'),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => IcerikYonetici()),
-          ),
-        ),
-      ],
-    );
-
-    */
-  }
-}
-
 class MenuOge {
   MenuOge({
-    this.simge,
-    this.baglanti,
-    this.baslik,
-    this.aciklama,
-    this.cssClass,
-    this.altOgeler,
+    @required this.simge,
+    @required this.widget,
+    @required this.baglanti,
+    @required this.baslik,
+    @required this.aciklama,
+    @required this.cssClass,
   });
 
-  String simge;
-  String baglanti;
-  String baslik;
-  String aciklama;
-  String cssClass;
-  List<dynamic> altOgeler;
-
-  factory MenuOge.fromRawJson(String str) => MenuOge.fromJson(convert.jsonDecode(str));
-
-  String toRawJson() => convert.jsonEncode(toJson());
-
-  factory MenuOge.fromJson(Map<String, dynamic> json) => MenuOge(
-        simge: json["simge"] == null ? null : json["simge"],
-        baglanti: json["baglanti"] == null ? null : json["baglanti"],
-        baslik: json["baslik"] == null ? null : json["baslik"],
-        aciklama: json["aciklama"] == null ? null : json["aciklama"],
-        cssClass: json["css_class"] == null ? null : json["css_class"],
-        altOgeler: json["alt_ogeler"] == null ? null : List<dynamic>.from(json["alt_ogeler"].map((x) => x)),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "simge": simge == null ? null : simge,
-        "baglanti": baglanti == null ? null : baglanti,
-        "baslik": baslik == null ? null : baslik,
-        "aciklama": aciklama == null ? null : aciklama,
-        "css_class": cssClass == null ? null : cssClass,
-        "alt_ogeler": altOgeler == null ? null : List<dynamic>.from(altOgeler.map((x) => x)),
-      };
+  final String simge;
+  final String widget;
+  final String baglanti;
+  final String baslik;
+  final String aciklama;
+  final String cssClass;
 }
