@@ -33,28 +33,13 @@ class _ProfilState extends State<Profil> {
               padding: const EdgeInsets.all(40.0),
               child: Column(
                 children: [
-                  CircleAvatar(
-                      radius: 40.0,
-                      backgroundImage: _lokalbilgi?.getBool('oturum')
-                          ? NetworkImage(
-                              "https://mor.podkobi.com/ws/p/?i=profilFotografi&k_id=" +
-                                  _lokalbilgi
-                                      ?.getInt("kullanici_id")
-                                      .toString())
-                          : AssetImage('dosya/profil.png')),
+                  CircleAvatar(radius: 40.0, backgroundImage: _lokalbilgi?.getBool('oturum') ? NetworkImage("https://mor.podkobi.com/ws/p/?i=profilFotografi&k_id=" + _lokalbilgi?.getInt("kullanici_id").toString()) : AssetImage('dosya/profil.png')),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    _lokalbilgi?.getBool('oturum') == true
-                        ? (_lokalbilgi?.getString('kullanici_isim') +
-                            ' ' +
-                            _lokalbilgi?.getString('kullanici_soyisim'))
-                        : 'İsim Yok',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                    _lokalbilgi?.getBool('oturum') == true ? (_lokalbilgi?.getString('kullanici_isim') + ' ' + _lokalbilgi?.getString('kullanici_soyisim')) : 'İsim Yok',
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -94,9 +79,7 @@ class _ProfilState extends State<Profil> {
                 _lokalbilgi.remove("kullanici_soyisim");
                 _lokalbilgi.remove("kullanici_eposta");
               }),
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => OturumAc()),
-                  (Route<dynamic> route) => false)
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => OturumAc()), (Route<dynamic> route) => false)
             },
           ),
         ],

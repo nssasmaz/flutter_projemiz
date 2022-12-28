@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_projemiz/ekranlar/IcerikYonetici/index.dart';
-import 'package:flutter_projemiz/sistem/Kullanici.dart';
-import 'package:flutter_projemiz/sistem/globals.dart' as globals;
-import 'package:flutter_projemiz/ekranlar/karsilama.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'kayit_ol.dart';
 import 'oturum_ac.dart';
 import 'profil.dart';
 
@@ -40,31 +36,17 @@ class _AnasayfaState extends State<Anasayfa> {
     int isletmeId = lokalbilgi.getInt("isletme_id");
     int kullaniciId = lokalbilgi.getInt("kullanici_id");
     List<MenuOge> paketListesi = [];
-    paketListesi.add(new MenuOge(
-      simge: "home",
-      baglanti: "anasayfa",
-      baslik: "Anasayfa",
-      aciklama: "",
-      cssClass: "",
-    ));
+    paketListesi.add(new MenuOge(simge: "home", baglanti: "anasayfa", baslik: "Anasayfa", aciklama: "", cssClass: "", widget: "Anasayfa"));
     try {
       final response = await http.get(
-        Uri.parse(
-            'https://mor.podkobi.com/ws/p/?i=paketler&i_id=$isletmeId&k_id=$kullaniciId'),
+        Uri.parse('https://mor.podkobi.com/ws/p/?i=paketler&i_id=$isletmeId&k_id=$kullaniciId'),
       );
 
       if (response.statusCode == 200) {
-        var sonucPaketler =
-            convert.jsonDecode(response.body)["veri"] as Map<String, dynamic>;
+        var sonucPaketler = convert.jsonDecode(response.body)["veri"] as Map<String, dynamic>;
         if (sonucPaketler.length > 0) {
           sonucPaketler.forEach((key, deger) {
-            paketListesi.add(new MenuOge(
-                simge: deger["simge"],
-                widget: deger["widget"],
-                baglanti: deger["baglanti"],
-                baslik: deger["baslik"],
-                aciklama: deger["aciklama"],
-                cssClass: deger["cssClass"]));
+            paketListesi.add(new MenuOge(simge: deger["simge"], widget: deger["widget"], baglanti: deger["baglanti"], baslik: deger["baslik"], aciklama: deger["aciklama"], cssClass: deger["cssClass"]));
           });
         }
       }
@@ -87,8 +69,7 @@ class _AnasayfaState extends State<Anasayfa> {
       drawer: Drawer(
         child: FutureBuilder(
           future: _paketListesi(),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<MenuOge>> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<List<MenuOge>> snapshot) {
             if (snapshot.data == null) {
               return Column(
                 children: [
@@ -140,8 +121,7 @@ class _AnasayfaState extends State<Anasayfa> {
         ),
         actions: <Widget>[
           IconButton(
-            onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Profil())),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Profil())),
             icon: Icon(Icons.account_circle, color: Colors.white),
           )
         ],

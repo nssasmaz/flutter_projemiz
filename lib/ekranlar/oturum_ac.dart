@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_projemiz/ekranlar/anasayfa.dart';
-import 'package:flutter_projemiz/ekranlar/karsilama.dart';
 import 'package:flutter_projemiz/ekranlar/kayit_ol.dart';
 import 'package:flutter_projemiz/sistem/Kullanici.dart';
 import 'package:flutter_projemiz/ekranlar/sifremi_unuttum.dart';
@@ -23,8 +22,7 @@ class _OturumAcState extends State<OturumAc> {
     Kullanici kBilgi;
 
     Future<void> _oturumAc(String _kkod, String _sifre) async {
-      final SharedPreferences lokalbilgi =
-          await SharedPreferences.getInstance();
+      final SharedPreferences lokalbilgi = await SharedPreferences.getInstance();
       if (_kkod == '' || _sifre == '') {
         showDialog(
           context: context,
@@ -42,10 +40,8 @@ class _OturumAcState extends State<OturumAc> {
 
     */
         // POST METODU
-        var request = http.MultipartRequest(
-            'POST', Uri.parse('https://mor.podkobi.com/ws/p/'));
-        request.fields.addAll(
-            {'i': 'oturum-ac', 'kullanici_adi': _kkod, 'sifre': _sifre});
+        var request = http.MultipartRequest('POST', Uri.parse('https://mor.podkobi.com/ws/p/'));
+        request.fields.addAll({'i': 'oturum-ac', 'kullanici_adi': _kkod, 'sifre': _sifre});
 
         http.StreamedResponse response = await request.send();
         if (response.statusCode == 200) {
@@ -63,8 +59,7 @@ class _OturumAcState extends State<OturumAc> {
               lokalbilgi.setString("kullanici_yetki", kBilgi.kYetki);
               lokalbilgi.setString("kullanici_pizin", kBilgi.kPIzin);
             });
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Anasayfa()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Anasayfa()));
             /*
             showDialog(
               context: context,
@@ -138,8 +133,7 @@ class _OturumAcState extends State<OturumAc> {
                           TextField(
                             decoration: new InputDecoration(
                               hintText: 'Kullanıcı Adı',
-                              hintStyle:
-                                  TextStyle(fontSize: 12.0, color: Colors.grey),
+                              hintStyle: TextStyle(fontSize: 12.0, color: Colors.grey),
                               contentPadding: EdgeInsets.all(20),
                               border: InputBorder.none,
                             ),
@@ -149,8 +143,7 @@ class _OturumAcState extends State<OturumAc> {
                           TextField(
                             decoration: new InputDecoration(
                               hintText: 'Şifre',
-                              hintStyle:
-                                  TextStyle(fontSize: 12.0, color: Colors.grey),
+                              hintStyle: TextStyle(fontSize: 12.0, color: Colors.grey),
                               contentPadding: EdgeInsets.all(20),
                               border: InputBorder.none,
                             ),
@@ -160,9 +153,7 @@ class _OturumAcState extends State<OturumAc> {
                           ),
                         ],
                       ),
-                      decoration: new BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.white),
+                      decoration: new BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.white),
                     ),
                     SizedBox(height: 40),
 
@@ -173,14 +164,10 @@ class _OturumAcState extends State<OturumAc> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SifremiUnuttum())),
+                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SifremiUnuttum())),
                               child: Text(
                                 "Şifremi Unuttum",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 11),
+                                style: TextStyle(color: Colors.white, fontSize: 11),
                               ),
                             ),
                             SizedBox(
@@ -191,14 +178,10 @@ class _OturumAcState extends State<OturumAc> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => KayitOl())),
+                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => KayitOl())),
                               child: Text(
                                 "Kayıt Ol",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 11),
+                                style: TextStyle(color: Colors.white, fontSize: 11),
                               ),
                             ),
                             SizedBox(
@@ -209,19 +192,14 @@ class _OturumAcState extends State<OturumAc> {
                               child: ElevatedButton(
                                 child: Text(
                                   "OTURUM AÇ",
-                                  style: TextStyle(
-                                      color: Color(0xFF5E0524),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Color(0xFF5E0524), fontSize: 12, fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () async {
-                                  _oturumAc(
-                                      formKullaniciAdi.text, formSifre.text);
+                                  _oturumAc(formKullaniciAdi.text, formSifre.text);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.orange,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 18, horizontal: 25),
+                                  padding: EdgeInsets.symmetric(vertical: 18, horizontal: 25),
                                 ),
                               ),
                             ),
